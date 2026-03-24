@@ -15,6 +15,8 @@ jobs:
   build-windows:
     runs-on: windows-latest
     timeout-minutes: 45
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
 
     steps:
       - name: Checkout repository
@@ -23,14 +25,21 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
 
       - name: Install dependencies
         run: npm ci
 
-      - name: Build app and Windows artifacts
-        run: npm run build
+      - name: Build app (electron-vite)
+        run: npm run build:app
+
+      - name: Build portable Windows EXE
+        run: npx electron-builder --win portable --publish never
+
+      - name: Show release directory
+        shell: pwsh
+        run: Get-ChildItem -Recurse release | Select-Object FullName, Length
 
       - name: Upload release artifacts
         uses: actions/upload-artifact@v4
@@ -38,7 +47,5 @@ jobs:
           name: influx2farm-windows-release
           path: |
             release/**/*.exe
-            release/**/*.yml
-            release/**/*.blockmap
           if-no-files-found: error
           retention-days: 14

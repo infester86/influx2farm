@@ -59,7 +59,7 @@ npm run build:app
 Es gibt einen GitHub-Actions-Workflow unter `.github/workflows/build-windows-exe.yml`.
 
 - Trigger: `push` auf `main`, Pull Requests auf `main`, manuell via `workflow_dispatch`
-- Ergebnis: Windows-Build inkl. EXE-Dateien als Artifact `influx2farm-windows-release`
+- Ergebnis: portable Windows-EXE als Artifact `influx2farm-windows-release`
 
 ## `.env` in der gebauten App
 
